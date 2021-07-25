@@ -1,5 +1,5 @@
 import axios from "axios";
-import { flow, types } from "mobx-state-tree";
+import { flow, Instance, types } from "mobx-state-tree";
 
 import { getAccounts } from "src/api/users/accounts";
 import {
@@ -61,4 +61,6 @@ export const UserStore = types
     }),
   }));
 
-export const makeUserStore = UserStore.create({});
+export const userStore = UserStore.create({});
+
+export type UserStoreType = Instance<typeof UserStore>;
