@@ -1,10 +1,13 @@
-import React, {useContext} from 'react';
+import {observer} from 'mobx-react-lite';
+import React from 'react';
 
-import {UserContext} from 'src/contexts/user.context';
+import {useStore} from 'src/contexts/store.context';
 import {BorderContainer, Label, Main, TextFielset, Title} from 'src/styles/theme';
 
-export const ProfilePage = React.memo(() => {
-	const {user} = useContext(UserContext);
+export const ProfilePage = observer(() => {
+	const {
+		user: {name, siren, fullAddress, accounts},
+	} = useStore();
 
 	return (
 		<Main>
@@ -12,19 +15,19 @@ export const ProfilePage = React.memo(() => {
 			<BorderContainer>
 				<TextFielset>
 					<Label>Name:</Label>
-					<span>{user?.name}</span>
+					<span>{name}</span>
 				</TextFielset>
 				<TextFielset>
 					<Label>SIRET:</Label>
-					<span>{user?.siren}</span>
+					<span>{siren}</span>
 				</TextFielset>
 				<TextFielset>
 					<Label>Address:</Label>
-					<span>{user?.fullAddress}</span>
+					<span>{fullAddress}</span>
 				</TextFielset>
 				<TextFielset>
 					<Label>N. Of Accounts:</Label>
-					<span>{user?.accounts.length}</span>
+					<span>{accounts?.length}</span>
 				</TextFielset>
 			</BorderContainer>
 		</Main>
