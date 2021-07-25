@@ -2,10 +2,7 @@ import axios from "axios";
 import { flow, Instance, types } from "mobx-state-tree";
 
 import { getAccounts } from "src/api/users/accounts";
-import {
-  RandomUserResults,
-  MasterAccounts,
-} from "src/api/users/users.response";
+import { GetRandomUser, MasterAccounts } from "src/api/users/users.response";
 
 export const UserStore = types
   .model("UserStore", {
@@ -39,8 +36,8 @@ export const UserStore = types
   }))
   .actions((self) => ({
     fetchUser: flow(function* () {
-      const data: RandomUserResults = yield self.fetchRandomUser();
-      const user = data.results[0];
+      const ramdonUser: GetRandomUser = yield self.fetchRandomUser();
+      const user = ramdonUser.data.results[0];
 
       const userName = `${user.name.title} ${user.name.first} ${user.name.last}`;
       self.setUserName(userName);
@@ -50,14 +47,14 @@ export const UserStore = types
 
       const sirenData = yield self.fetchSiren();
       const fullAddress: string =
-        sirenData.unite_legale.etablissement_siege.geo_adresse;
+        sirenData.data.unite_legale.etablissement_siege.geo_adresse;
       self.setUserFullAddress(fullAddress);
 
       // TODO: criar uma store para accounts e trazer de lá.
       const accounts: MasterAccounts[] = yield getAccounts();
       self.setAccounts(accounts);
 
-      return data;
+      return ramdonUser;
     }),
   }));
 

@@ -1,19 +1,25 @@
-import React, {useContext} from 'react';
+import {observer} from 'mobx-react-lite';
+import React, {useEffect} from 'react';
 
 import {UserSnippetContainer, UserSnippetFigure} from 'src/components/Profile/user-snippet.style';
-import {UserContext} from 'src/contexts/user.context';
+import {useStore} from 'src/contexts/store.context';
 import {LinkNoStyle} from 'src/styles/theme';
 
-export const UserSnippet = React.memo(() => {
-	const {user} = useContext(UserContext);
+export const UserSnippet = observer(() => {
+	// const {user} = useContext(UserContext);
+	const {name, image, fetchUser} = useStore();
+
+	useEffect(() => {
+		fetchUser();
+	}, [fetchUser]);
 
 	return (
 		<LinkNoStyle to="/profile">
 			<UserSnippetContainer>
 				<UserSnippetFigure>
-					<img src={user?.image} alt={user?.name} />
+					<img src={image} alt={name} />
 				</UserSnippetFigure>
-				<p>{user?.name}</p>
+				<p>{name}</p>
 			</UserSnippetContainer>
 		</LinkNoStyle>
 	);
