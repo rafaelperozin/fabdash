@@ -6,7 +6,7 @@ import {BorderContainer, Label, Main, TextFielset, Title} from 'src/styles/theme
 
 export const ProfilePage = observer(() => {
 	const {
-		user: {name, siren, fullAddress, accounts},
+		user: {name, siren, fullAddress, accounts, countTransactions},
 	} = useStore();
 
 	return (
@@ -28,6 +28,10 @@ export const ProfilePage = observer(() => {
 				<TextFielset>
 					<Label>N. Of Accounts:</Label>
 					<span>{accounts?.length}</span>
+				</TextFielset>
+				<TextFielset>
+					<Label>N. Of Transactions:</Label>
+					<span>{countTransactions()}</span>
 				</TextFielset>
 			</BorderContainer>
 		</Main>

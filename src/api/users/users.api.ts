@@ -22,7 +22,7 @@ export const userData = async (): Promise<User> => {
   });
 
   const fullAddress: string = await getAddress();
-  const accounts: Accounts[] = await getAccounts();
+  const accounts: Accounts[] = await getAccounts().savings();
 
   return {
     name: user.name,

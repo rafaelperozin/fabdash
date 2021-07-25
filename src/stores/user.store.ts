@@ -2,6 +2,7 @@ import axios from "axios";
 import { flow, Instance, types } from "mobx-state-tree";
 
 import { getAccounts } from "src/api/users/accounts";
+import { AccountTypes } from "src/api/users/users.model";
 import { GetRandomUser, MasterAccounts } from "src/api/users/users.response";
 
 export const UserStore = types
@@ -11,6 +12,7 @@ export const UserStore = types
     siren: types.maybe(types.number),
     fullAddress: types.maybe(types.string),
     accounts: types.maybe(types.frozen<MasterAccounts[]>()),
+    transactions: types.maybe(types.frozen<MasterAccounts[]>()),
   })
   .actions((self) => ({
     setUserName: (name: string) => (self.name = name),
@@ -18,6 +20,8 @@ export const UserStore = types
     setUserSiren: (siren: number) => (self.siren = siren),
     setUserFullAddress: (address: string) => (self.fullAddress = address),
     setAccounts: (accounts: MasterAccounts[]) => (self.accounts = accounts),
+    setTransactions: (transactions: MasterAccounts[]) =>
+      (self.transactions = transactions),
   }))
   .actions((self) => ({
     fetchRandomUser: flow(function* () {
@@ -51,11 +55,22 @@ export const UserStore = types
       self.setUserFullAddress(fullAddress);
 
       // TODO: criar uma store para accounts e trazer de lá.
-      const accounts: MasterAccounts[] = yield getAccounts();
+      const accounts: MasterAccounts[] = yield getAccounts().savings();
       self.setAccounts(accounts);
+
+      const transactions: MasterAccounts[] = yield getAccounts().transactions();
+      self.setTransactions(transactions);
 
       return ramdonUser;
     }),
+  }))
+  .views((self) => ({
+    countTransactions: (): number | undefined => {
+      const transactionsList = self.transactions?.filter(
+        (account) => account.account_type === AccountTypes.TRANSACTION
+      );
+      return transactionsList?.length;
+    },
   }));
 
 export const userStore = UserStore.create({});
