@@ -7,7 +7,7 @@ import { rem } from "src/utils/px-to-rem";
 export const AccActions = styled.div`
   border-top: 1px solid ${colors.grey.one};
   display: flex;
-  alig-items: center;
+  align-items: center;
   justify-content: space-around;
   flex-wrap: nowrap;
 `;
